@@ -1,5 +1,6 @@
 package com.miempresa.regiones
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -19,6 +20,7 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.AlignmentLine
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
@@ -40,7 +42,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-
+var selected = ""
 @Preview
 @Composable
 fun app() {
@@ -54,6 +56,7 @@ fun app() {
         Icons.Filled.KeyboardArrowUp
     else
         Icons.Filled.KeyboardArrowDown
+    val mContext = LocalContext.current
 
 
     Column(
@@ -109,14 +112,51 @@ fun app() {
             suggestions.forEach { label ->
                 DropdownMenuItem(onClick = {
                     selectedText = label
+                    selected = label
                     expanded = false
                 }) {
                     Text(text = label)
                 }
             }
         }
+        Row(
+            modifier = Modifier.padding(all = 16.dp),
+            horizontalArrangement = Arrangement.Center
 
+        ) {
+
+            Button(
+                modifier = Modifier.fillMaxWidth(),
+                onClick = {
+
+                val intent = Intent(mContext, MainActivity2::class.java)
+                intent.putExtra("Region", selected)
+                if (selected == "Costa") {
+                    intent.putExtra("Imagen", "https://i.pinimg.com/originals/5e/e1/35/5ee135027e32954a7fbdb99d80e879d3.jpg")
+
+                } else if (selected == "Sierra") {
+                    intent.putExtra(
+                        "Imagen",
+                        "https://i.pinimg.com/550x/af/e4/74/afe4742ed12c8e230ba467db337d2cec.jpg"
+                    )
+                } else if (selected == "Selva") {
+                    intent.putExtra(
+                        "Imagen",
+                        "https://i.pinimg.com/originals/d5/b4/05/d5b405eb833da8e91f161f36653b9314.jpg"
+                    )
+                }
+                    mContext.startActivity(intent)
+
+            },
+                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Blue),
+            ) {
+                Text("Buscar", color = Color.White)
+            }
+        }
     }
+
+
+
 
 }
 
